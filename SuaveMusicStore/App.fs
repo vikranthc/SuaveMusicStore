@@ -1,4 +1,6 @@
-﻿open Suave
+﻿module SuaveMusicStore.App
+
+open Suave
 open Suave.Successful
 open Suave.Operators
 open Suave.Web
@@ -14,7 +16,7 @@ let browse =
 
 let webPart : WebPart =
     choose [
-        path "/" >=> OK "Home"
+        path "/" >=> OK View.index
         path "/store" >=> OK "Store"
         path "/store/browse" >=> browse
         path "/store/details" >=> OK "Details"
