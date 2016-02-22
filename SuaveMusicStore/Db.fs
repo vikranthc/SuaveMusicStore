@@ -2,7 +2,7 @@
 
 open FSharp.Data.Sql
 
-type Sql = SqlDataProvider<DatabaseVendor=Common.DatabaseProviderTypes.MSSQLSERVER,ConnectionString="Server=Lenovo-PC\SQLExpress; Database=SuaveMusicStore; Trusted_Connection=true;MultipleActiveResultSets=true" >
+type Sql = SqlDataProvider<DatabaseVendor=Common.DatabaseProviderTypes.MSSQLSERVER,ConnectionString="Server=localhost\SQLExpress; Database=SuaveMusicStore; Trusted_Connection=true;MultipleActiveResultSets=true" >
 
 type DbContext = Sql.dataContext
 type Album = DbContext.``dbo.AlbumsEntity``
