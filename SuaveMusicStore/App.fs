@@ -4,7 +4,6 @@ open Suave
 open Suave.Operators
 open Suave.Web
 open Suave.Filters
-open Suave.Http
 open Suave.RequestErrors
 open View
 
@@ -19,6 +18,25 @@ let details id =
     match Db.getAlbumDetails id (Db.getContext()) with
     | Some album ->
         html (View.details album)
+    | None -> never
+
+let manage = warbler (fun _ ->
+    Db.getContext()
+    |> Db.getAlbumsDetails
+    |> View.manage
+    |> html)
+
+let deleteAlbum id =
+    let ctx = Db.getContext()
+    match Db.getAlbum id ctx with
+    | Some album -> 
+        choose [
+            GET >=> warbler (fun _ ->
+                html (View.deleteAlbum album.Title))
+            POST >=> warbler(fun _ ->
+                Db.deleteAlbum album ctx;
+                Redirection.FOUND Path.Admin.manage)
+        ]
     | None -> never
 
 let browse =
@@ -36,6 +54,9 @@ let webPart : WebPart =
         path Path.home >=> html View.home
         path Path.Store.overview >=> overview
         path Path.Store.browse >=> browse
+        path Path.Admin.manage >=> manage
+
+        pathScan Path.Admin.deleteAlbum deleteAlbum
         pathScan Path.Store.details details
 
         pathRegex "(.*)\.(css|png)" >=> Files.browseHome
