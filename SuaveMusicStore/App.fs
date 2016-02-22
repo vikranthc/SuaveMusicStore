@@ -8,6 +8,13 @@ open Suave.Http
 open Suave.RequestErrors
 open View
 
+let overview =
+    Db.getContext()
+    |> Db.getGenres
+    |> List.map (fun g -> g.Name)
+    |> View.store
+    |> html
+
 let browse =
     request (fun r -> 
         match r.queryParam Path.Store.browseKey with
@@ -17,7 +24,7 @@ let browse =
 let webPart : WebPart =
     choose [
         path Path.home >=> html View.home
-        path Path.Store.overview >=> html (View.store ["Rock"; "Disco"; "Pop"])
+        path Path.Store.overview >=> overview
         path Path.Store.browse >=> browse
         pathScan Path.Store.details (fun id -> html (View.details id))
 
