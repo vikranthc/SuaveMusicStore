@@ -57,6 +57,7 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Db.fs" />
     <Compile Include="Path.fs" />
+    <Compile Include="Form.fs" />
     <Compile Include="View.fs" />
     <Compile Include="App.fs" />
     <None Include="App.config" />
@@ -77,6 +78,7 @@
       <HintPath>..\packages\SQLProvider.0.0.11-alpha\lib\FSharp.Data.SqlProvider.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FSharp.Data.TypeProviders" />
     <Reference Include="mscorlib" />
     <Reference Include="Suave">
       <HintPath>..\packages\Suave.1.1.1\lib\net40\Suave.dll</HintPath>
@@ -89,6 +91,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

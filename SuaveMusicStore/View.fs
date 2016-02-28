@@ -37,9 +37,7 @@ let details (album: Db.AlbumDetails) = [
                 text t
             ]
     ]
-
 ]
-
 
 let index container =
     html [
@@ -108,7 +106,6 @@ let manage (albums : Db.AlbumDetails list) = [
                 aHref (sprintf Path.Admin.deleteAlbum album.AlbumId) (text "Delete")
             ]
         ]
-
     ]
 ]
 
