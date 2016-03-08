@@ -28,6 +28,15 @@ let form x = tag "form" [ "method", "POST" ] (flatten x)
 let fieldset x = tag "fieldset" [] (flatten x)
 let legend txt = tag "legend" [] (text txt)
 
+
+let ulAttr attr xml = tag "ul" attr (flatten xml)
+let partNav =
+    ulAttr ["id", "navlist"] [
+        li (aHref Path.home (text "Home"))
+        li (aHref Path.Store.overview (text "Store"))
+        li (aHref Path.Admin.manage (text "Admin"))
+    ]
+
 let submitInput value = 
     inputAttr [ "type", "submit"
                 "value", value ]
@@ -67,11 +76,24 @@ let details (album : Db.AlbumDetails) =
                                                     "Price", formatDec album.Price ] -> 
                                   p [ em caption
                                       text t ] ] ]
+let partUser (user: string option) =
+    divId "part-user" [
+        match user with
+        | Some user ->
+            yield text (sprintf "Logged on as %s, " user)
+            yield aHref Path.Account.logoff (text "Log off")
+        | None ->
+            yield aHref Path.Account.logon (text "Log on")
+    ]
 
-let index container = 
+let index partUser container = 
     html [ head [ title "Suave Music Store"
                   cssLink "/Site.css" ]
-           body [ divId "header" [ h1 (aHref Path.home (text "F# Suave Music Store")) ]
+           body [ divId "header" [
+                        h1 (aHref Path.home (text "F# Suave Music Store"))        
+                        partNav
+                        partUser
+                    ]
                   divId "main" container
                   divId "footer" [ text "built with "
                                    aHref "http://fsharp.org" <| text "F#"
@@ -164,4 +186,16 @@ let editAlbum (album : Db.Album) genres artists =
                    SubmitText = "Save Changes" }
       div [ aHref Path.Admin.manage (text "Back to list") ] ]
 
-let html container = OK(index container) >=> Writers.setMimeType "text/Html; charset=utf-8"
+let logon msg = 
+    [ h2 "Log On"
+      p [ text " Please enter your user name and password." ]
+      divId "logon-message" [ text msg ]
+      renderForm { Form = Form.logon
+                   Fieldsets = 
+                       [ { Legend = "Account Information"
+                           Fields = [ { Label = "User Name"
+                                        Xml = input (fun f -> <@ f.Username @>) [] } 
+                                      { Label = "Password"
+                                        Xml = input (fun f -> <@ f.Password @>) [] } ] }]
+                   SubmitText = "Log On" } ]
+

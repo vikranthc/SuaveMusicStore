@@ -10,6 +10,20 @@ type Album = {
     ArtUrl : string
 }
 
+type Logon = {
+    Username : string
+    Password : Password
+}
+
+type UserLoggedOnSession = {
+    Username : string
+    Role : string
+}
+
+type Session =
+    | NoSession
+    | UserLoggedOn of UserLoggedOnSession
+
 let album : Form<Album> =
     Form ([ TextProp ((fun f -> <@ f.Title @>), [maxLength 100])
             TextProp ((fun f -> <@ f.ArtUrl@>), [maxLength 100])
@@ -17,3 +31,5 @@ let album : Form<Album> =
             ],
           [])
 
+let logon : Form<Logon> =
+    Form ([], [])

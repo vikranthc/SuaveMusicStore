@@ -9,6 +9,7 @@ type Album = DbContext.``dbo.AlbumsEntity``
 type Genre = DbContext.``dbo.GenresEntity``
 type AlbumDetails = DbContext.``dbo.AlbumDetailsEntity``
 type Artist = DbContext.``dbo.ArtistsEntity``
+type User = DbContext.``dbo.UsersEntity``
 
 let firstOrNone s = s |> Seq.tryFind (fun _ -> true)
 
@@ -61,4 +62,13 @@ let updateAlbum (album : Album) (artistId, genreId, price, title) (ctx : DbConte
     album.Price <- price
     album.Title <- title
     ctx.SubmitUpdates()
+
+let validateUser (username, password) (ctx : DbContext) : User option =
+    query {
+        for user in ctx.Dbo.Users do
+            where (user.UserName = username && user.Password = password)
+            select user
+    } |> firstOrNone
+
+
 
